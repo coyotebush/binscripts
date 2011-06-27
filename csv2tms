@@ -1,0 +1,7 @@
+#!/usr/bin/perl
+print "#tms-marker\n";
+foreach (<>)
+{
+	my ($lat, $lon) = split (/[, ]+/);
+	print "$lon,$lat:red2:\n";
+}

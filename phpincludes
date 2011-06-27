@@ -1,0 +1,45 @@
+#!/usr/bin/perl
+# Outputs a Graphviz file based on the
+# structure of includes in PHP files in the
+# current directory
+
+use Cwd;
+use File::Find;
+
+my $count = 0;
+my $indexcount = 0;
+#open (OUTFILE, ">includemap.dot");
+
+print "digraph inkludes { \n";
+find(\&Process, cwd());
+print "}; ";
+
+#print "$count includes processed\n";
+
+sub Process
+{
+	# Skip anything that isn't a PHP file
+	/\.php$/ or return;
+
+	open(FILE, $_) or return;
+	
+	# Get basename
+	my $b = $_;
+	$b =~ s/-//g;    # Without hyphens
+	$b =~ s/\..*//g; # Without the extension
+	
+	$b .= $indexcount++ if (/index\.php/);
+
+	foreach (<FILE>)
+	{
+		# Find include lines
+		if (/^\s*(require|include)(_once)? ?\(? ?['"]([\.a-zA-Z-]+\/)*([a-zA-Z-]+).php['"]\)?;$/)
+		{
+			my $a = $4;
+			$a =~ s/[\.-]//g;
+			#next if $a =~ /common/;
+			print $a." -> ".$b.";\n";
+			++$count;
+		}
+	}
+}

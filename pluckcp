@@ -1,0 +1,6 @@
+#!/bin/sh
+# Copy any Plucker output files that are more recent than
+# the last HotSync to be installed on the Palm handheld.
+PALMUSER=Corey
+find ~/Library/Plucker/channels/ -iname '*.pdb' -newer ~/Documents/Palm/Users/$PALMUSER/HotSync\ Log -exec cp '{}' ~/Documents/Palm/Users/$PALMUSER/Files\ to\ Install/ \;
+

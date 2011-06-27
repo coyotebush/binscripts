@@ -1,0 +1,114 @@
+#!/bin/sh
+
+# Uses gpxrewrite to rewrite geocache descriptions, filters caches by type,
+# then uses GPSBabel to install geocache information on a Garmin GPSr and/or
+# creates CacheMate files for a Palm PDA.
+
+# Usage: gcload [-g]|[-p]|[-n] file.gpx [file2.gpx ...]
+
+#--------- Settings -----------------
+# gpxrewrite configuration file
+GPXREWRITECONFIG=~/.config/gpxrewrite_wpt_travel.ini
+# CMConvert options
+CMCONVERTOPTS="-BCDdOS -N 10"
+# Garmin port
+GARMINPORT="usb:"
+#------------------------------------
+
+### Set up
+MYNAME=`basename $0`
+TEMPDIR=`mktemp -d -t $MYNAME`
+TEMPDIR="$TEMPDIR/"
+PALMINSTALL="/Users/corey/Documents/Palm/Users/Corey/Files To Install/"
+### Get flags to determine where to send the output
+# (code adapted from getopt(1) man page example)
+GARMIN=0
+PALM=0
+
+ARGS=`getopt gpn $*`
+if [ $? != 0 ]
+then
+	echo "Usage: $0 [-g]|[-p]|[-n] file.gpx [file2.gpx ...]"
+	exit 2
+fi
+set -- $ARGS
+for i
+do
+	case "$i"
+	in
+		-g) # Garmin
+			GARMIN=1
+			shift;;
+		-p) # Palm
+			PALM=1
+			shift;;
+		-n) # Neither
+			GARMIN=-1
+			PALM=-1
+			shift;;
+		--)
+			shift; break;;
+	esac
+done
+
+#If neither was specified, use both
+if [ $GARMIN -eq 0 ]
+then
+	if [ $PALM -eq 0 ]
+	then
+		GARMIN=1
+		PALM=1
+	fi
+fi
+
+### Get files
+if [ $# -eq 0 ]
+then
+	echo "Usage: $0 [-g]|[-p]|[-n] file.gpx [file2.gpx ...]"
+	exit 2
+fi
+
+for FILE in "$@"
+do
+	cp "$FILE" "$TEMPDIR"
+	if [ $? -ne 0 ]
+	then
+		echo "Error opening file $FILE"
+		exit 2
+	fi
+done
+
+### Rewrite names and descriptions
+for FILE in $TEMPDIR/*.gpx
+do
+	gpxrewrite "$GPXREWRITECONFIG" "$FILE" "$FILE.rw"
+done
+
+### Install to GPSr
+if [ $GARMIN -gt 0 ]
+then
+	echo Installing to Garmin...
+	FILES=""
+	for FILE in $TEMPDIR/*.gpx.rw
+	do
+		FILES="$FILES -f $FILE"
+	done	
+	gpsbabel -i gpx $FILES -o garmin -F $GARMINPORT
+fi
+
+### Create CacheMate files
+if [ $PALM -gt 0 ]
+then
+	echo Creating CacheMate files...
+	for FILE in $TEMPDIR/*.gpx
+	do
+		cmconvert $CMCONVERTOPTS -F -o $FILE.unfound.pdb $FILE
+		cmconvert $CMCONVERTOPTS -f -o $FILE.found.pdb $FILE
+	done
+	# Open files
+	echo Loading CacheMate files...
+	mv $TEMPDIR/*.pdb "$PALMINSTALL"
+fi
+
+### Clean up
+rm -f $TEMPDIR/*.gpx $TEMPDIR/*.gpx.rw $TEMPDIR/*.pdb

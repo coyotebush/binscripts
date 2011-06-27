@@ -1,0 +1,8 @@
+#!/bin/bash
+
+read ip
+
+echo -n "IP address: ";
+echo $ip;
+curl "http://api.hostip.info/get_html.php?ip=$ip";
+echo ""

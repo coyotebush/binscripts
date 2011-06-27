@@ -1,0 +1,60 @@
+#!/bin/bash
+
+# Slices and dices PQs to prepare them for POI Loader
+# Uses gpsbabel and gpx_tools
+
+OUTPUT=~/Documents/Geocaching/POI/Geocaches
+INSTALL=~/Documents/Geocaching/POI/Install
+GPXREWRITE_CONFIG=~/.config/gpxrewrite_poi_travel.ini
+
+MYNAME=`basename $0`
+TEMPDIR=/tmp #`mktemp -d -t $MYNAME`
+
+# Use gpsbabel to merge the unfound queries
+echo Merging queries...
+MERGE=""
+for f in $@
+do
+	MERGE="$MERGE -f $f"
+	echo -n " `basename $f .gpx`"		
+done
+echo ...
+echo -n "Rewriting names and descriptions... "
+# use gpxrewrite to change the name and description in all files
+gpsbabel -i gpx $MERGE -o gpx -F - |\
+ gpxrewrite $GPXREWRITE_CONFIG > $TEMPDIR/unfound.gpx
+
+# use gpxfilter to sort unfound caches by type/size
+#CACHETYPE_NAMES = ( Multi Virtual Webcam Unknown Earthcache\
+# Letterbox Event Traditional Micro )
+#CACHETYPE_SELECTORS = ( "-type M" "-type V" "-type W" "-type U" "-type G"\
+# "-type B" "-type CE" "-type TA -size SRLUO" "-type TA -size M" )
+echo Sorting unfound caches by type...
+echo -n "Multi "
+gpxfilter $TEMPDIR/unfound.gpx $OUTPUT/Multi.gpx -type M
+echo -n "Virtual "
+gpxfilter $TEMPDIR/unfound.gpx $OUTPUT/Virtual.gpx -type V
+echo "Webcam "
+gpxfilter $TEMPDIR/unfound.gpx $OUTPUT/Webcam.gpx -type W
+echo -n "Unknown "
+gpxfilter $TEMPDIR/unfound.gpx $OUTPUT/Unknown.gpx -type U
+echo -n "Earthcache "
+gpxfilter $TEMPDIR/unfound.gpx $OUTPUT/Earthcache.gpx -type G
+echo "Letterbox-Hybrid "
+gpxfilter $TEMPDIR/unfound.gpx $OUTPUT/Letterbox.gpx -type B
+echo -n "Event "
+gpxfilter $TEMPDIR/unfound.gpx $OUTPUT/Event.gpx -type CE
+echo -n "Traditional "
+gpxfilter $TEMPDIR/unfound.gpx $OUTPUT/Traditional.gpx -type TA -size SRLUO
+echo -n "Micro"
+gpxfilter $TEMPDIR/unfound.gpx $OUTPUT/Micro.gpx -type TA -size M
+echo .
+echo Cleaning up...
+rm $TEMPDIR/unfound.gpx
+
+echo Launching POILoader...
+mv $OUTPUT $INSTALL
+/Applications/Garmin\ POI\ Loader.app/Contents/MacOS/POI\ Loader > /dev/null 2>&1
+mv $INSTALL/`basename $OUTPUT` $OUTPUT
+echo Done.
+
