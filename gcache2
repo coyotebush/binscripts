@@ -52,9 +52,9 @@ echo .
 echo Cleaning up...
 rm $TEMPDIR/unfound.gpx
 
-echo Launching POILoader...
-mv $OUTPUT $INSTALL
-/Applications/Garmin\ POI\ Loader.app/Contents/MacOS/POI\ Loader > /dev/null 2>&1
-mv $INSTALL/`basename $OUTPUT` $OUTPUT
+#echo Launching POILoader...
+#mv $OUTPUT $INSTALL
+#/Applications/Garmin\ POI\ Loader.app/Contents/MacOS/POI\ Loader > /dev/null 2>&1
+#mv $INSTALL/`basename $OUTPUT` $OUTPUT
 echo Done.
 

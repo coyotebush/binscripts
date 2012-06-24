@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Uses gpxrewrite to rewrite geocache descriptions, filters caches by type,
 # then uses GPSBabel to install geocache information on a Garmin GPSr and/or
@@ -17,7 +17,7 @@ GARMINPORT="usb:"
 
 ### Set up
 MYNAME=`basename $0`
-TEMPDIR=`mktemp -d -t $MYNAME`
+TEMPDIR=`mktemp -d -t $MYNAME.XXXXXX`
 TEMPDIR="$TEMPDIR/"
 PALMINSTALL="/Users/corey/Documents/Palm/Users/Corey/Files To Install/"
 ### Get flags to determine where to send the output
@@ -51,13 +51,13 @@ do
 	esac
 done
 
-#If neither was specified, use both
+#If neither was specified, use Garmin #both
 if [ $GARMIN -eq 0 ]
 then
 	if [ $PALM -eq 0 ]
 	then
 		GARMIN=1
-		PALM=1
+		#PALM=1
 	fi
 fi
 

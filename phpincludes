@@ -10,7 +10,7 @@ my $count = 0;
 my $indexcount = 0;
 #open (OUTFILE, ">includemap.dot");
 
-print "digraph inkludes { \n";
+print "digraph inkludes { \n ranksep=2;\n";
 find(\&Process, cwd());
 print "}; ";
 
