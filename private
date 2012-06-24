@@ -1,0 +1,24 @@
+#!/bin/sh
+MOUNT="ecryptfs-mount-private"
+UMOUNT="ecryptfs-umount-private"
+NOTIFY="notify-send"
+PRIVATE="$HOME/Private"
+
+if [ ! -t 0 ]; then MOUNT="xterm -e '$MOUNT'"; fi
+
+$MOUNT
+# sometimes doesn't mount properly
+while [ ! -f "$PRIVATE/Hide-Your-Private-Data.desktop" ]; do
+	$UMOUNT
+	$MOUNT
+done
+if [ ! -z $NOTIFY ]; then $NOTIFY "$PRIVATE mounted"; fi
+
+export TMPDIR="$PRIVATE/tmp"
+if [ ! -d $TMPDIR ]; then mkdir $TMPDIR; fi
+
+$@
+
+$UMOUNT
+if [ ! -z $NOTIFY ]; then $NOTIFY "$PRIVATE unmounted"; fi
+

@@ -1,0 +1,7 @@
+#!/bin/bash
+
+if ! lsof ~/Private
+then
+	/usr/bin/ecryptfs-umount-private
+fi
+

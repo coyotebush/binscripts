@@ -1,0 +1,3 @@
+#!/bin/sh -
+apt-show-versions | grep -v -E '/(squeeze|wheezy) ' | sort -t/ -k2
+

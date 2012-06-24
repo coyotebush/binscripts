@@ -1,0 +1,7 @@
+#!/bin/bash
+# Run by rsnapshot to back up list of installed packages
+
+/usr/bin/dpkg --get-selections > dpkg-get-selections.txt
+/usr/bin/aptitude -F '%p' search '~M' > auto-packages.txt
+/usr/bin/aptitude -F '%p' search '~i!~M' > manual-packages.txt
+
