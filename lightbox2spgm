@@ -30,7 +30,7 @@ while (<IN_PAGE>) {
 }
 close IN_PAGE;
 
-# Create thumbnail directory
+# Create thumbnail directory (user will have to use genthumb)
 mkdir "$out_dir/thumbnails";
 
 # Create blank index.html
@@ -40,3 +40,41 @@ close FH;
 # Create gal-desc.txt
 open FH, ">$out_dir/gal-desc.txt";
 close FH;
+
+=head1 NAME
+
+lightbox2spgm - create an SPGM gallery from a Lightbox-enabled webpage
+
+=head1 SYNOPSIS
+
+lightbox2spgm lightbox_page images_dir gallery_dir
+
+=head1 ARGUMENTS
+
+=over
+
+=item lightbox_page
+
+HTML source file equipped for Lightbox
+(L<http://www.lokeshdhakar.com/projects/lightbox2/>) or similar.
+
+=item images_dir
+
+Directory containing image files referenced by the webpage.
+
+=item gallery_dir
+
+An empty directory into which the gallery's files will be placed.
+
+=back
+
+=head1 BUGS
+
+The script assumes that the Lightbox page will reference images in the "images/"
+directory. It also expects the <a> tag to be contained on one line.
+
+An empty "thumbnails" directory will be created in the gallery directory for
+convenience, but a tool such as the "genthumb" script included with SPGM will
+have to be used to actually create thumbnails.
+
+=cut
