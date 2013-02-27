@@ -1,4 +1,4 @@
 #!/bin/sh
 
 killall trayer
-exec trayer --edge top --align right --widthtype percent --width 20 --height 22 --transparent true --alpha 0 --tint 0x3c3c3c --monitor primary
+exec trayer --edge top --align right --widthtype percent --width 20 --height 22 --transparent true --alpha 0 --tint 0x4b4b4b --monitor primary
