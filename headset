@@ -3,4 +3,5 @@ killall plugin-container # Flash
 killall skype
 sudo service bluetooth restart
 pulseaudio --kill
+killall xfce4-volumed && xfce4-volumed &
 
