@@ -5,6 +5,6 @@ choice=`ls $DIR|dmenu -m 0 -p "layout: "`
 if [ $? -eq 0 ]
 then
 	$DIR/$choice
-	$HOME/bin/mytrayer
+	exec $HOME/bin/mytrayer
 fi
 
