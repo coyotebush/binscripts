@@ -1,5 +1,5 @@
 #!/bin/sh
-PRIVATE="$HOME/Private"
+PRIVATE="$HOME/docs/Private"
 TMPDIR="$PRIVATE/tmp"
 TESTFILE="$TMPDIR"
 
