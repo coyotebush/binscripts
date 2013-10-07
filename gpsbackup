@@ -2,8 +2,8 @@
 # Archives old track logs on a Garmin GPS's microSD card,
 # then backs up archived logs and POIs to the local drive
 # -- Parameters --
-GPSVOLUME="/media/VISTAHCX"
-BACKUPDIR="$HOME/Documents/GPSBackup"
+GPSVOLUME="/mnt/usb"
+BACKUPDIR="$HOME/docs/GPSBackup"
 # ----------------
 
 # Get log files except todays
