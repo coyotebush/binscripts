@@ -1,2 +1,6 @@
 #!/bin/sh
-[ -n "$DISPLAY" ] && gvim $@ || vim $@
+if [ -n "$DISPLAY" ]; then
+    gvim $@
+else
+    vim $@
+fi
