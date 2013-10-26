@@ -1,0 +1,4 @@
+#!/bin/sh
+xset dpms 3
+slock
+xset dpms 0
