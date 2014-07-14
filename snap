@@ -1,3 +1,2 @@
 #!/bin/sh
-cd
-tarsnap -c --keyfile ~/.tarsnap/write.key -f $(date +home-%Y%m%d-%H%M%S) "$@" .
+tarsnap -c --keyfile ~/.tarsnap/write.key -f $(date -u +home-%Y%m%d-%H%M%S) -C $HOME "$@" .
