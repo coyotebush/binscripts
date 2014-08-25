@@ -8,7 +8,7 @@
 
 #--------- Settings -----------------
 # gpxrewrite configuration file
-GPXREWRITECONFIG=~/.config/gpxrewrite_wpt_travel.ini
+GPXREWRITECONFIG=~/.config/gpxrewrite/wpt.ini
 # CMConvert options
 CMCONVERTOPTS="-BCDdOS -N 10"
 # Garmin port
