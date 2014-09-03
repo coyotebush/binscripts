@@ -1,0 +1,23 @@
+#!/bin/sh
+# Automatically configure displays for a laptop that
+# may have one or two external displays connected.
+
+LAPTOP="LVDS1"
+EXT1="DP1"
+EXT2="VGA1"
+POSITION="right-of"
+
+if xrandr -q | grep -q "$EXT1 connected"; then
+  xrandr --output $LAPTOP --off
+  xrandr --output $EXT1 --primary --auto
+
+  if xrandr -q | grep -q "$EXT2 connected"; then
+    xrandr --output $EXT2 --auto --$POSITION $EXT1
+  else
+    xrandr --output $EXT2 --off
+  fi
+else
+  xrandr --output $EXT2 --off
+  xrandr --output $EXT1 --off \
+	 --output $LAPTOP --primary --auto
+fi
