@@ -12,7 +12,7 @@ my $indexcount = 0;
 
 print "digraph inkludes { \n ranksep=2;\n";
 find(\&Process, cwd());
-print "}; ";
+print "}";
 
 #print "$count includes processed\n";
 
